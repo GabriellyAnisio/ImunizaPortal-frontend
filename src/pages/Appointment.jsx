@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  ChakraProvider,
   Box,
   FormControl,
   FormLabel,
@@ -27,7 +26,6 @@ const AppointmentForm = () => {
 
 
   return (
-    <ChakraProvider>
       <Box p={8} maxWidth="md" mx="auto">
         <Heading as="h2" size="xl" textAlign="center" mb={6}>
           Scheduling form
@@ -74,7 +72,6 @@ const AppointmentForm = () => {
           </form>
         </Box>
       </Box>
-    </ChakraProvider>
   );
 };
 
