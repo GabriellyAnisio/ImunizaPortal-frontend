@@ -10,6 +10,7 @@ import {
 } from '@chakra-ui/react';
 import DatePicker from 'react-datepicker'; 
 import 'react-datepicker/dist/react-datepicker.css';
+import WithSubnavigation from '../components/Navbar'; 
 
 const AppointmentForm = () => {
   const [birthdate, setBirthdate] = React.useState(null);
@@ -24,8 +25,9 @@ const AppointmentForm = () => {
     });
   };
 
-
   return (
+    <Box>
+      <WithSubnavigation/>
       <Box p={8} maxWidth="md" mx="auto">
         <Heading as="h2" size="xl" textAlign="center" mb={6}>
           Scheduling form
@@ -72,6 +74,8 @@ const AppointmentForm = () => {
           </form>
         </Box>
       </Box>
+    </Box>
+      
   );
 };
 
