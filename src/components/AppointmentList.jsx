@@ -23,7 +23,7 @@ const AppointmentsList = ({ appointmentsData, handleUpdate }) => {
 
   const groupedByDateAndTime = sortedAppointments.reduce((acc, appointment) => {
     const date = new Date(appointment.dateTime).toLocaleDateString();
-    const time = new Date(appointment.dateTime).toLocaleTimeString();
+    const time = new Date(appointment.dateTime).toUTCString().slice(-12, -4);
 
     if (!acc[date]) {
       acc[date] = {};
@@ -71,6 +71,4 @@ const AppointmentsList = ({ appointmentsData, handleUpdate }) => {
   );
 };
 
-
-  
 export default AppointmentsList;
