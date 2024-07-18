@@ -1,53 +1,43 @@
-import { useState } from 'react';
-import {
-  Box,
-  Heading,
-} from '@chakra-ui/react';
+import { useState, useEffect } from 'react';
+import { Box, Heading, Spinner } from '@chakra-ui/react';
 import WithSubnavigation from '../components/Navbar'; 
 import AppointmentList from '../components/AppointmentList';
-
-const appointments = [
-  {
-    id: '1',
-    dateTime: '2024-07-20T09:00',
-    status: 'scheduled',
-    patient: {
-      name: 'Maria Silva',
-      dob: '1990-05-10',
-    },
-  },
-  {
-    id: '1',
-    dateTime: '2024-07-21T08:00',
-    status: 'scheduled',
-    patient: {
-      name: 'Aaaaaaaaaaaaaaaaaaa',
-      dob: '1975-12-15',
-    },
-  },
-  {
-    id: '2',
-    dateTime: '2024-07-20T10:00',
-    status: 'scheduled',
-    patient: {
-      name: 'João Santos',
-      dob: '1985-08-22',
-    },
-  },
-  {
-    id: '3',
-    dateTime: '2024-07-01T11:00',
-    status: 'scheduled',
-    patient: {
-      name: 'Ana Costa',
-      dob: '1975-12-15',
-    },
-  },
-];
-
+import axios from '../services/api.js'; 
+import { format } from 'date-fns';
 
 const AppointmentsPage = () => {
-  const [appointmentsData, setAppointmentsData] = useState(appointments);
+  const [appointmentsData, setAppointmentsData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchData = async () => {
+    try {
+      const data = await axios('/api/appointment');
+      console.log(data.items); 
+
+      const appointments = data.items.map(item => ({
+        id: item.id,
+        dateTime: item.dateTime,
+        status: item.status,
+        patient: {
+          id: item.patient.id,
+          name: item.patient.name,
+          dob: format(new Date(item.patient.birthDate), 'dd/MM/yyyy')
+        }
+      }));
+
+      setAppointmentsData(appointments);
+    } catch (error) {
+      setError(error.message || 'Error fetching data');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const handleUpdate = (updatedAppointment, updatedValues) => {
     setAppointmentsData((prev) =>
@@ -58,6 +48,9 @@ const AppointmentsPage = () => {
       )
     );
   };
+
+  if (loading) return <Spinner/>;
+  if (error) return <p>Error: {error}</p>;
 
   return (
     <Box>
