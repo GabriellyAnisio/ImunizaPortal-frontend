@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from '../services/api'; 
 import 'react-datepicker/dist/react-datepicker.css';
+import { useModal } from '../context/ModalContext'; 
 
 const schema = z.object({
   name: z
@@ -27,6 +28,8 @@ const AppointmentSubmit = () => {
     },
   });
 
+  const { openModal } = useModal();
+
   const onSubmit = async (data) => {
     const formData = {
       name: data.name,
@@ -35,10 +38,10 @@ const AppointmentSubmit = () => {
     };
 
     try {
-      const response = await axios.post('/api/appointment', formData);
-      console.log('Appointment created successfully:', response);
+      await axios.post('/api/appointment', formData);
+      openModal('Appointment created successfully!');
     } catch (error) {
-      console.error('Error creating appointment:', error);
+      openModal(`Error creating appointment: ${error.message}`);
     }
   };
 
@@ -69,6 +72,9 @@ const AppointmentSubmit = () => {
                   onChange={(date) => field.onChange(date)}
                   dateFormat="dd/MM/yyyy"
                   placeholderText="Select date of birth"
+                  showYearDropdown
+                  yearDropdownItemNumber={50}
+                  scrollableYearDropdown
                 />
               )}
             />
