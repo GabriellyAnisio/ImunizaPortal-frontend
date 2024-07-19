@@ -13,18 +13,21 @@ const AppointmentsPage = () => {
   const fetchData = async () => {
     try {
       const data = await axios('/api/appointment');
-      console.log(data.items); 
+      console.log(data.items);
 
-      const appointments = data.items.map(item => ({
-        id: item.id,
-        dateTime: item.dateTime,
-        status: item.status,
-        patient: {
-          id: item.patient.id,
-          name: item.patient.name,
-          dob: format(new Date(item.patient.birthDate), 'dd/MM/yyyy')
-        }
-      }));
+      const appointments = data.items.map(item => {
+        const localDateTime = (item.dateTime);
+        return {
+          id: item.id,
+          dateTime: localDateTime,
+          status: item.status,
+          patient: {
+            id: item.patient.id,
+            name: item.patient.name,
+            dob: format(new Date(item.patient.birthDate), 'dd/MM/yyyy')
+          }
+        };
+      });
 
       setAppointmentsData(appointments);
     } catch (error) {
@@ -33,7 +36,6 @@ const AppointmentsPage = () => {
       setLoading(false);
     }
   };
-
 
   useEffect(() => {
     fetchData();
@@ -49,7 +51,7 @@ const AppointmentsPage = () => {
     );
   };
 
-  if (loading) return <Spinner/>;
+  if (loading) return <Spinner />;
   if (error) return <p>Error: {error}</p>;
 
   return (

@@ -7,6 +7,7 @@ import axios from '../services/api';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useModal } from '../context/ModalContext'; 
 import { useEffect } from 'react';
+import { toZonedTime } from 'date-fns-tz';
 
 const schema = z.object({
   name: z
@@ -49,11 +50,17 @@ const AppointmentSubmit = () => {
   }, [watch]);
 
   const onSubmit = async (data) => {
+    const timeZone = 'America/Sao_Paulo'; 
+    console.log(data.dateTime)
+    const zonedDateTime = toZonedTime(data.dateTime, timeZone);
+    console.log(zonedDateTime)
     const formData = {
       name: data.name,
       birthDate: data.birthdate.toISOString().split('T')[0],
-      dateTime: data.dateTime.toISOString(), 
+      dateTime: String(zonedDateTime),
     };
+    console.log(formData.dateTime)
+
 
     try {
       await axios.post('/api/appointment', formData);
