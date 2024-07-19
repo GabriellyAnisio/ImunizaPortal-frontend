@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import axios from '../services/api'; 
 import 'react-datepicker/dist/react-datepicker.css';
 import { useModal } from '../context/ModalContext'; 
+import { useEffect } from 'react';
 
 const schema = z.object({
   name: z
@@ -18,7 +19,7 @@ const schema = z.object({
 });
 
 const AppointmentSubmit = () => {
-  const { handleSubmit, control, formState: { errors, isValid }, register } = useForm({
+  const { handleSubmit, control, formState: { errors, isValid }, register, watch, setValue } = useForm({
     mode: 'onChange',
     resolver: zodResolver(schema),
     defaultValues: {
@@ -30,6 +31,23 @@ const AppointmentSubmit = () => {
 
   const { openModal } = useModal();
 
+  useEffect(() => {
+    const savedData = localStorage.getItem('appointmentFormData');
+    if (savedData) {
+      const { name, birthdate, dateTime } = JSON.parse(savedData);
+      setValue('name', name);
+      setValue('birthdate', birthdate ? new Date(birthdate) : null);
+      setValue('dateTime', dateTime ? new Date(dateTime) : null);
+    }
+  }, [setValue]);
+
+  useEffect(() => {
+    const subscription = watch((value) => {
+      localStorage.setItem('appointmentFormData', JSON.stringify(value));
+    });
+    return () => subscription.unsubscribe();
+  }, [watch]);
+
   const onSubmit = async (data) => {
     const formData = {
       name: data.name,
@@ -40,6 +58,7 @@ const AppointmentSubmit = () => {
     try {
       await axios.post('/api/appointment', formData);
       openModal('Appointment created successfully!');
+      localStorage.removeItem('appointmentFormData');
     } catch (error) {
       openModal(`Error creating appointment: ${error.message}`);
     }
