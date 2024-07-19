@@ -44,7 +44,8 @@ import {
               </Text>{' '}
             </Heading>
             <Text fontSize={{ base: 'md', lg: 'lg' }} color={'gray.500'}>
-            Schedule your Covid-19 vaccine. Protect yourself and protect those you love most.          </Text>
+            Schedule your Covid-19 vaccine. Protect yourself and protect those you love most.
+            </Text>
             <Stack direction={{ base: 'column', md: 'row' }} spacing={4}>
               <Button
                 rounded={'full'}

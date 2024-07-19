@@ -1,7 +1,7 @@
 import { Box, Heading } from '@chakra-ui/react';
 import 'react-datepicker/dist/react-datepicker.css';
 import WithSubnavigation from '../components/Navbar';
-import AppointmentSubmit from '../components/AppointmentForm';
+import AppointmentSubmit from '../components/AppointmentSubmit';
 
 const AppointmentForm = () => {
   return (
