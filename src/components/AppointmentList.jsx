@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Box, Heading, SimpleGrid, Button } from '@chakra-ui/react';
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 import AppointmentCard from './AppointmentCard';
+import { format } from 'date-fns';
 
 const AppointmentsList = ({ appointmentsData, handleUpdate }) => {
   const [expandedTimes, setExpandedTimes] = useState({});
@@ -21,8 +22,8 @@ const AppointmentsList = ({ appointmentsData, handleUpdate }) => {
   });
 
   const groupedByDateAndTime = sortedAppointments.reduce((acc, appointment) => {
-    const date = new Date(appointment.dateTime).toLocaleDateString();
-    const time = new Date(appointment.dateTime).toUTCString().slice(-12,-7);
+    const date = format(new Date(appointment.dateTime), 'dd/MM/yyyy');
+    const time = format(new Date(appointment.dateTime), 'HH:mm');
 
     if (!acc[date]) {
       acc[date] = {};

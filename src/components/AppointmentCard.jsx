@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Box, Stack, Text, Select } from '@chakra-ui/react';
 import axios from '../services/api'; 
+import { Box, Stack, Text, Select } from '@chakra-ui/react';
 
 const AppointmentCard = ({ appointment, onUpdate }) => {
   const [status, setStatus] = useState(appointment.status);
@@ -25,7 +25,7 @@ const AppointmentCard = ({ appointment, onUpdate }) => {
       <Stack spacing="4">
         <Text><strong>Name:</strong> {appointment.patient.name}</Text>
         <Text><strong>Birthdate:</strong> {appointment.patient.dob}</Text>
-        <Text><strong>Schedule Time:</strong> {new Date(appointment.dateTime).toUTCString().slice(-12, -4)}</Text>
+        <Text><strong>Schedule Time:</strong> {new Date(appointment.dateTime).getHours()} h</Text>
         <Text><strong>Schedule Date:</strong> {new Date(appointment.dateTime).toLocaleDateString()}</Text>
         <Select onChange={handleStatusChange} value={status} disabled={status === 'completed' || status === 'missed'}>
           <option value="scheduled">Scheduled</option>

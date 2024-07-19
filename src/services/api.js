@@ -1,5 +1,5 @@
 import axios_ from 'axios';
-import env from '../utils/env';
+import env from '../utils/env.mjs';
 
 const axiosInstance = axios_.create({
   baseURL: env.VITE_BACKEND_URL,
