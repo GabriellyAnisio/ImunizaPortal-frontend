@@ -17,13 +17,12 @@ const AppointmentsList = ({ appointmentsData, handleUpdate }) => {
   };
 
   const sortedAppointments = [...appointmentsData].sort((a, b) => {
-    const dateComparison = new Date(a.dateTime) - new Date(b.dateTime);
-    return dateComparison;
+    return new Date(a.dateTime) - new Date(b.dateTime);
   });
 
   const groupedByDateAndTime = sortedAppointments.reduce((acc, appointment) => {
     const date = new Date(appointment.dateTime).toLocaleDateString();
-    const time = new Date(appointment.dateTime).toUTCString().slice(-12, -4);
+    const time = new Date(appointment.dateTime).toUTCString().slice(-12,-7);
 
     if (!acc[date]) {
       acc[date] = {};
@@ -40,7 +39,7 @@ const AppointmentsList = ({ appointmentsData, handleUpdate }) => {
       {Object.keys(groupedByDateAndTime).map((date) => (
         <Box key={date} mb="8">
           <Heading as="h3" size="md" mb="4">{date}</Heading>
-          {Object.keys(groupedByDateAndTime[date]).map((time) => (
+          {Object.keys(groupedByDateAndTime[date]).sort().map((time) => (
             <Box key={time} mb="4">
               <Button
                 onClick={() => handleTimeClick(date, time)}
